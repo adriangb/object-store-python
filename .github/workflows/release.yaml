@@ -12,34 +12,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-  release-pypi-mac:
-    needs: validate-release-tag
-    name: PyPI release on Mac
-    runs-on: macos-11
-
-    strategy:
-      fail-fast: false
-      matrix:
-        target: [x86_64-apple-darwin, aarch64-apple-darwin]
-
-    steps:
-      - uses: actions/checkout@v3
-      - run: rm object-store/README.md && cp README.md object-store/README.md
-
-      - uses: actions/setup-python@v2
-        with:
-          python-version: "3.10"
-
-      - uses: PyO3/maturin-action@v1
-        name: Publish to pypi (without sdist)
-        with:
-          target: ${{ matrix.target }}
-          command: build
-          args: -m object-store/Cargo.toml --release
-      - uses: actions/upload-artifact@v4
-        with:
-          path: target/wheels/*.whl
-
   release-pypi-mac-universal2:
     needs: validate-release-tag
     name: PyPI release on Mac universal 2
@@ -56,9 +28,9 @@ jobs:
       - uses: PyO3/maturin-action@v1
         name: Publish to pypi (without sdist)
         with:
-          target: ${{ matrix.target }}
+          target: universal2-apple-darwin
           command: build
-          args: -m object-store/Cargo.toml -target universal2-apple-darwin  --release
+          args: -m object-store/Cargo.toml --release
       - uses: actions/upload-artifact@v4
         with:
           path: target/wheels/*.whl
