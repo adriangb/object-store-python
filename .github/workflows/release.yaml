@@ -33,6 +33,7 @@ jobs:
           args: -m object-store/Cargo.toml --release
       - uses: actions/upload-artifact@v4
         with:
+          name: macos-universal2
           path: target/wheels/*.whl
 
   release-pypi-windows:
@@ -77,6 +78,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           path: target/wheels/*.whl
+          name: manylinux-x86_64
 
       - uses: PyO3/maturin-action@v1
         name: Publish manylinux to pypi aarch64 (without sdist)
@@ -87,3 +89,4 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           path: target/wheels/*.whl
+          name: manylinux-aarch64
